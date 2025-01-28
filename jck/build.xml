@@ -114,7 +114,19 @@
 			</not>
 		</and>
 	</condition>
-	
+	<target name="debug-conditions" description="Debugging condition can_build_jck_natives_windows">
+    <echo message="jck_runtimes_src_dir = ${jck_runtimes_src_dir}"/>
+    <echo message="is_windows = ${is_windows}"/>
+    <echo message="windows_native_compiler_present = ${windows_native_compiler_present}"/>
+    <echo message="can_build_jck_natives_windows = ${can_build_jck_natives_windows}"/>
+	<echo message="vcvarsall_filename = ${vcvarsall_filename}"/>
+	<echo message="vs22_pro_vcvarsall_filename = ${vs22_pro_vcvarsall_filename}"/>
+    <echo message="vs22_pro_available = ${vs22_pro_available}"/>
+	</target>
+
+<target name="main" depends="debug-conditions">
+    <echo message="Running main target..."/>
+</target>
 	<target name="stage-jck-material">
 		<!-- Starting downloading or updating JCK materials based on JCK GIT REPO and JCK VERSION-->
 		<if>
