@@ -116,14 +116,14 @@
 	</condition>
 
 	<target name="stage-jck-material">
-	<echo message="PLACE1" />
-	<echo message="jck_runtimes_src_dir = ${jck_runtimes_src_dir}"/>
-    <echo message="is_windows = ${is_windows}"/>
-    <echo message="windows_native_compiler_present = ${windows_native_compiler_present}"/>
-    <echo message="can_build_jck_natives_windows = ${can_build_jck_natives_windows}"/>
-	<echo message="vcvarsall_filename = ${vcvarsall_filename}"/>
-	<echo message="vs22_pro_vcvarsall_filename = ${vs22_pro_vcvarsall_filename}"/>
-    <echo message="vs22_pro_available = ${vs22_pro_available}"/>
+		<echo message="PLACE1"/>
+		<echo message="jck_runtimes_src_dir = ${jck_runtimes_src_dir}"/>
+    	<echo message="is_windows = ${is_windows}"/>
+    	<echo message="windows_native_compiler_present = ${windows_native_compiler_present}"/>
+    	<echo message="can_build_jck_natives_windows = ${can_build_jck_natives_windows}"/>
+		<echo message="vcvarsall_filename = ${vcvarsall_filename}"/>
+		<echo message="vs22_pro_vcvarsall_filename = ${vs22_pro_vcvarsall_filename}"/>
+    	<echo message="vs22_pro_available = ${vs22_pro_available}"/>
 		<!-- Starting downloading or updating JCK materials based on JCK GIT REPO and JCK VERSION-->
 		<if>
 			<available file="${JCK_ROOT_USED}" type="dir" />
@@ -286,15 +286,15 @@
 	</target>
 		
 	<target name="setup-native-build-command">
-	<echo message="TEST FOR VISUALSTUDIO"/>
-	<echo message="jck_runtimes_src_dir= ${jck_runtimes_src_dir}"/>
-    <echo message="is_windows = ${is_windows}"/>
-    <echo message="windows_native_compiler_present = ${windows_native_compiler_present}"/>
-    <echo message="can_build_jck_natives_windows = ${can_build_jck_natives_windows}"/>
-	<echo message="vcvarsall_filename = ${vcvarsall_filename}"/>
-	<echo message="vs22_pro_vcvarsall_filename = ${vs22_pro_vcvarsall_filename}"/>
-    <echo message="vs22_pro_available = ${vs22_pro_available}"/>
 		<echo message="Building jck natives"/>
+		<echo message="TEST FOR VISUALSTUDIO"/>
+		<echo message="jck_runtimes_src_dir= ${jck_runtimes_src_dir}"/>
+    	<echo message="is_windows = ${is_windows}"/>
+    	<echo message="windows_native_compiler_present = ${windows_native_compiler_present}"/>
+    	<echo message="can_build_jck_natives_windows = ${can_build_jck_natives_windows}"/>
+		<echo message="vcvarsall_filename = ${vcvarsall_filename}"/>
+		<echo message="vs22_pro_vcvarsall_filename = ${vs22_pro_vcvarsall_filename}"/>
+    	<echo message="vs22_pro_available = ${vs22_pro_available}"/>
 		<property name="openjdk_test_jck_native_build_command" value='${setup_windows_build_env}make build -f ${jtrunner_src_dir}/makefile SRCDIR=${jck_runtimes_src_dir} JAVA_HOME=${TEST_JDK_HOME} OUTDIR=${JCK_ROOT_USED}/natives'/>
 		<tempfile property="openjdk_test_jck_native_build_command_file" destDir="${java.io.tmpdir}" prefix="openjdk.build.command."/>
 	</target>
