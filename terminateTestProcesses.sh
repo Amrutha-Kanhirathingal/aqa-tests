@@ -7,29 +7,49 @@ if [ "$OS" = "Windows_NT" ]; then
   echo "Windows machine, using powershell queries..."
 
   # Match anything that is most likely a test job or process related
-  match_str="(CommandLine like '%java%jck%' or \
-             CommandLine like '%jdkbinary%java%' or \
-             CommandLine like '%java%javatest%' or \
-             CommandLine like '%java%-Xfuture%' or \
-             CommandLine like '%rmid%' or \
-             CommandLine like '%rmiregistry%' or \
-             CommandLine like '%tnameserv%' or \
-             CommandLine like '%make.exe%')"
+  match_str=@"(CommandLine like '%java%jck%' or
+             CommandLine like '%jdkbinary%java%' or
+             CommandLine like '%java%javatest%' or
+             CommandLine like '%java%-Xfuture%' or
+             CommandLine like '%rmid%' or
+             CommandLine like '%rmiregistry%' or
+             CommandLine like '%tnameserv%' or
+             CommandLine like '%make.exe%')"@
 
   # Ignore Jenkins agent and grep cmd
-  ignore_str="not CommandLine like '%remoting.jar%' and \
+  ignore_str=@"not CommandLine like '%remoting.jar%' and \
               not CommandLine like '%agent.jar%' and \
-              not CommandLine like '%grep%'"
+              not CommandLine like '%grep%'"@
 
-  count=$(powershell -c "(Get-CimInstance Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\r")
-
-  if [ $count -gt 0 ]; then
+  # count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
+  # powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
+  # powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}).Terminate()"
+    powershell -c "Get-WmiObject Win32_Process | Where-Object { \$_.CommandLine -match '$match_str' -and \$_.CommandLine -notmatch '$ignore_str' }"
+    count=$(powershell -c "(Get-WmiObject Win32_Process | Where-Object { \$_.CommandLine -match '$match_str' -and \$_.CommandLine -notmatch '$ignore_str' } | Measure-Object).Count" | tr -d '\r')
+    echo "Matching process count: $count"
+    pids=$(powershell -c "(Get-WmiObject Win32_Process | Where-Object { \$_.CommandLine -match '$match_str' -and \$_.CommandLine -notmatch '$ignore_str' }).ProcessId")
+    if [ $count -gt 0 ]; then
     echo Windows rogue processes detected, attempting to stop them..
-    powershell -c "Get-CimInstance Win32_Process -Filter {${ignore_str} and ${match_str}}"
-    powershell -c "(Get-CimInstance Win32_Process -Filter {${ignore_str} and ${match_str}}).Terminate()"
+    for pid in $pids; do
+      powershell -c "Stop-Process -Id $pid -Force"
+    done
     echo Sleeping for 10 seconds...
     sleep 10
-    count=$(powershell -c "(Get-CimInstance Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\r")
+
+    # Find the workspace path dynamically from the first matching process
+    workspace_path=$(powershell -c "\$process = Get-WmiObject Win32_Process | Where-Object { \$_.CommandLine -match '$match_str' -and \$_.CommandLine -notmatch '$ignore_str' } | Select-Object -First 1;if (\$process) { \$process.CommandLine -match '([A-Za-z]:\\\\[^ ]+)' | Out-Null; echo \$matches[1] }")
+
+    # If a workspace path is found, delete only its contents (not the folder itself)
+    if [[ -n "$workspace_path" ]]; then
+      echo "Clearing workspace: $workspace_path"
+      powershell -c "Remove-Item -Path '$workspace_path\*' -Recurse -Force"
+    else
+      echo "No workspace found for cleanup."
+    fi
+    # count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
+    count= $(powershell -c "(Get-WmiObject Win32_Process | Where-Object { \$_.CommandLine -match '$match_str' -and \$_.CommandLine -notmatch '$ignore_str' } | Measure-Object).Count" | tr -d '\r')
+    echo "Matching process after force stop count: $count"
+    
     if [ $count -gt 0 ]; then
       echo "Cleanup failed, ${count} processes still remain..."
       exit 127
