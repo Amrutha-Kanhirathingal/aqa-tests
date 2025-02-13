@@ -27,10 +27,10 @@ if [ "$OS" = "Windows_NT" ]; then
     echo Windows rogue processes detected, attempting to stop them..
     echo "ignore_str=${ignore_str} match_str=${match_str}"
     powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
-    powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}).Terminate()"
+    # powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}).Terminate()"
     #check after termination again the process are running or not
     echo after process termination
-    powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
+    #powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
     echo forceful termination
     powershell -c "& { Get-Process | Where-Object { ${ignore_str} -and ${match_str} } | Stop-Process -Force }"
     echo Sleeping for 10 seconds...
