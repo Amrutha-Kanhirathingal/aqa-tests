@@ -22,7 +22,7 @@ if [ "$OS" = "Windows_NT" ]; then
               not CommandLine like '%grep%'"
 
   count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
-  
+  echo "count of process =${count}"
   if [ $count -gt 0 ]; then
       echo Windows rogue processes detected, attempting to stop them..
       powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
