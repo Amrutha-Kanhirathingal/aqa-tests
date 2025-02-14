@@ -7,34 +7,29 @@ if [ "$OS" = "Windows_NT" ]; then
   echo "Windows machine, using powershell queries..."
 
   # Match anything that is most likely a test job or process related
-  match_str="(CommandLine LIKE '%java%jck%' OR \
-             CommandLine LIKE '%jdkbinary%java%' OR \
-             CommandLine LIKE '%java%javatest%' OR \
-             CommandLine LIKE '%java%-Xfuture%' OR \
-             CommandLine LIKE '%rmid%' OR \
-             CommandLine LIKE '%rmiregistry%' OR \
-             CommandLine LIKE '%tnameserv%' OR \
-             CommandLine LIKE '%make.exe%')"
+  match_str="(CommandLine like '%java%jck%' or \
+             CommandLine like '%jdkbinary%java%' or \
+             CommandLine like '%java%javatest%' or \
+             CommandLine like '%java%-Xfuture%' or \
+             CommandLine like '%rmid%' or \
+             CommandLine like '%rmiregistry%' or \
+             CommandLine like '%tnameserv%' or \
+             CommandLine like '%make.exe%')"
 
   # Ignore Jenkins agent and grep cmd
-  ignore_str="(NOT CommandLine LIKE '%remoting.jar%' and \
-              NOT CommandLine LIKE '%agent.jar%' and \
-              NOT CommandLine LIKE '%grep%')"
+  ignore_str="not CommandLine like '%remoting.jar%' and \
+              not CommandLine like '%agent.jar%' and \
+              not CommandLine like '%grep%'"
 
-  filter_query="$match_str AND $ignore_str"                      
-
-  count=$(powershell -Command "(Get-WmiObject Win32_Process -Filter \"$filter_query\" | Measure-Object).Count")
-  echo "count of process =${count}"
+  count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
+  
   if [ $count -gt 0 ]; then
       echo Windows rogue processes detected, attempting to stop them..
-      # powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
-      # powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}).Terminate()"
-      powershell -Command "Get-WmiObject Win32_Process -Filter \"$filter_query\" | Select-Object ProcessId,CommandLine"
-      powershell -Command "Get-WmiObject Win32_Process -Filter \"$filter_query\" | ForEach-Object { \$_.Terminate() }"
+      powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
+      powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}).Terminate()"
       echo Sleeping for 10 seconds...
       sleep 10
-      count=$(powershell -Command "(Get-WmiObject Win32_Process -Filter \"$filter_query\" | Measure-Object).Count")
-      echo "count of process after termination =${count}"
+      count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
       if [ $count -gt 0 ]; then
         echo "Cleanup failed, ${count} processes still remain..."
         exit 127
@@ -94,4 +89,3 @@ else
 fi
 
 exit 0
-
