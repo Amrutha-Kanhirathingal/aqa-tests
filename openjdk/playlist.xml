@@ -1677,9 +1677,9 @@
 	<test>
 		<testCaseName>jdk_util_other</testCaseName>
 		<variations>
-			<variation>$(TEST_VARIATION_DUMP) Mode150</variation>
-			<variation>$(TEST_VARIATION_DUMP) Mode650</variation>
-			<variation>$(TEST_VARIATION_DUMP) Mode1000</variation>
+			<variation>Mode150</variation>
+			<variation>Mode650</variation>
+			<variation>Mode1000</variation>
 		</variations>
 		<command>$(JAVA_COMMAND) -Xmx512m $(APPLICATION_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx1540m $(JVM_OPTIONS) $(VMOPTION_HEADLESS)$(Q) \
@@ -1710,9 +1710,9 @@
 	<test>
 		<testCaseName>jdk_collections</testCaseName>
 		<variations>
-			<variation>$(TEST_VARIATION_DUMP) Mode150</variation>
-			<variation>$(TEST_VARIATION_DUMP) Mode650</variation>
-			<variation>$(TEST_VARIATION_DUMP) Mode1000</variation>
+			<variation>Mode150</variation>
+			<variation>Mode650</variation>
+			<variation>Mode1000</variation>
 		</variations>
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx1540m $(JVM_OPTIONS) $(VMOPTION_HEADLESS)$(Q) \
@@ -1743,9 +1743,9 @@
 	<test>
 		<testCaseName>jdk_concurrent</testCaseName>
 		<variations>
-			<variation>$(TEST_VARIATION_DUMP) Mode150</variation>
-			<variation>$(TEST_VARIATION_DUMP) Mode650</variation>
-			<variation>$(TEST_VARIATION_DUMP) Mode1000</variation>
+			<variation>Mode150</variation>
+			<variation>Mode650</variation>
+			<variation>Mode1000</variation>
 		</variations>
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx1540m $(JVM_OPTIONS) $(VMOPTION_HEADLESS)$(Q) \
@@ -1776,9 +1776,9 @@
 	<test>
 		<testCaseName>jdk_stream</testCaseName>
 		<variations>
-			<variation>$(TEST_VARIATION_DUMP) Mode150</variation>
-			<variation>$(TEST_VARIATION_DUMP) Mode650</variation>
-			<variation>$(TEST_VARIATION_DUMP) Mode1000</variation>
+			<variation>Mode150</variation>
+			<variation>Mode650</variation>
+			<variation>Mode1000</variation>
 		</variations>
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx1540m $(JVM_OPTIONS) $(VMOPTION_HEADLESS)$(Q) \
