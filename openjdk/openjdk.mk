@@ -207,9 +207,16 @@ TEST_VARIATION_JIT_PREVIEW:=
 TEST_VARIATION_JIT_AGGRESIVE:=
 TIMEOUT_HANDLER:=
 
-# if JDK_IMPL is openj9 or ibm
+# if JDK_IMPL is openj9 or ibm. 
+# When updating the PROBLEM_LIST_FILE for Project Valhalla also update it
+# in the build.xml dist target.
 ifneq ($(filter openj9 ibm, $(JDK_IMPL)),)
-	PROBLEM_LIST_FILE:=excludes/ProblemList_openjdk$(JDK_VERSION)-openj9.txt
+	ifneq ($(filter Valhalla, $(JDK_VERSION)),)
+		PROBLEM_LIST_FILE:=excludes/ProblemList_openjdk26-openj9.txt
+		PROBLEM_LIST_FILE_VALHALLA:=excludes/ProblemList_openjdkvalhalla-openj9.txt
+	else
+		PROBLEM_LIST_FILE:=excludes/ProblemList_openjdk$(JDK_VERSION)-openj9.txt
+	endif
 	PROBLEM_LIST_DEFAULT:=excludes/ProblemList_openjdk11-openj9.txt
 	TEST_VARIATION_DUMP:=-Xdump:system:none -Xdump:heap:none -Xdump:system:events=gpf+abort+traceassert+corruptcache
 	TEST_VARIATION_JIT_PREVIEW:=-XX:-JITServerTechPreviewMessage
@@ -232,10 +239,29 @@ endif
 FEATURE_PROBLEM_LIST_FILE:=
 ifneq (,$(findstring FIPS140_2, $(TEST_FLAG))) 
 	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-FIPS140_2.txt$(Q)
+else ifneq (,$(findstring FIPS140_3_OpenJCEPlusFIPS.FIPS140-3-Strongly-Enforced, $(TEST_FLAG)))
+	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-FIPS140_3_OpenJCEPlusFIPS.FIPS140-3-Strongly-Enforced.txt$(Q)
 else ifneq (,$(findstring FIPS140_3_OpenJCEPlusFIPS.FIPS140-3, $(TEST_FLAG)))
 	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-FIPS140_3_OpenJCEPlusFIPS.FIPS140-3.txt$(Q)
 else ifneq (,$(findstring FIPS140_3_OpenJCEPlus, $(TEST_FLAG)))
 	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-FIPS140_3_OpenJcePlus.txt$(Q)
+else ifneq (,$(findstring OpenJCEPlus, $(TEST_FLAG)))
+	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-OpenJCEPlus.txt$(Q)
+endif
+
+# If we are on alpine, we should also use the alpine-specific exclude file/s.
+ALPINE_PROBLEM_LIST_FILE:=$(TEST_ROOT)$(D)openjdk$(D)excludes$(D)alpine$(D)ProblemList_openjdk$(JDK_VERSION).txt
+ifneq (,$(findstring alpine, $(SPEC)))
+	ifneq (,$(realpath $(ALPINE_PROBLEM_LIST_FILE)))
+		ifeq (,$(FEATURE_PROBLEM_LIST_FILE))
+			FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(ALPINE_PROBLEM_LIST_FILE)$(Q)
+		else
+			FEATURE_PROBLEM_LIST_FILE+=-exclude:$(Q)$(ALPINE_PROBLEM_LIST_FILE)$(Q)
+		endif
+	else
+		# Using a dummy variable here so we can produce the message while avoiding this fatal error: "recipe commences before first target"
+		DUMMY_VAR:=$(warning Warning: An Alpine-specific ProblemList could not be found here: $(Q)$(ALPINE_PROBLEM_LIST_FILE)$(Q))
+	endif
 endif
 
 VENDOR_PROBLEM_LIST_FILE:=

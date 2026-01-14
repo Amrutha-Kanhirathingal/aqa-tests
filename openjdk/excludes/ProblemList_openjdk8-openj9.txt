@@ -140,8 +140,6 @@ sun/management/jmxremote/bootstrap/RmiSslNoKeyStoreTest.sh https://github.com/ad
 
 # jdk_jmx
 
-javax/management/MBeanServer/OldMBeanServerTest.java https://github.com/eclipse-openj9/openj9/issues/20777 generic-all
-
 ############################################################################
 
 # jdk_math
@@ -207,7 +205,8 @@ java/nio/channels/AsyncCloseAndInterrupt.java	https://github.com/eclipse-openj9/
 java/nio/channels/AsynchronousSocketChannel/Basic.java	https://bugs.openjdk.java.net/browse/JDK-7052549	windows-all
 java/nio/channels/AsynchronousSocketChannel/CompletionHandlerRelease.java https://github.com/eclipse-openj9/openj9/issues/12167 aix-all
 java/nio/channels/AsynchronousSocketChannel/StressLoopback.java https://bugs.openjdk.java.net/browse/JDK-8211851 aix-all
-java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1053 macosx-all
+java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1622 windows-all
+java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,macosx-all,windows-all
 java/nio/channels/DatagramChannel/MulticastSendReceiveTests.java	https://github.ibm.com/runtimes/backlog/issues/783	generic-all
 java/nio/channels/DatagramChannel/Promiscuous.java  https://github.com/adoptium/infrastructure/issues/699   generic-all
 java/nio/channels/DatagramChannel/SendToUnresolved.java	https://github.com/eclipse-openj9/openj9/issues/1130	generic-all
@@ -285,6 +284,9 @@ sun/security/pkcs11/tls/TestKeyMaterial.java	https://github.com/adoptium/aqa-tes
 sun/security/rsa/TestCACerts.java	https://github.com/adoptium/aqa-tests/issues/125	generic-all
 sun/security/ssl/SSLSocketImpl/AsyncSSLSocketClose.java  https://github.com/eclipse-openj9/openj9/issues/18575 aix-all
 sun/security/ssl/SSLSocketImpl/SSLSocketCloseHang.java	https://github.com/adoptium/aqa-tests/issues/125	generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Camerfirma.java https://github.com/eclipse-openj9/openj9/issues/21235 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Entrust.java https://github.com/adoptium/aqa-tests/issues/3976 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Symantec.java https://github.com/eclipse-openj9/openj9/issues/21380 generic-all
 sun/security/tools/jarsigner/diffend.sh	https://github.com/adoptium/aqa-tests/issues/125	linux-all
 sun/security/tools/jarsigner/emptymanifest.sh	https://github.com/adoptium/aqa-tests/issues/125	generic-all
 com/sun/crypto/provider/Cipher/AES/TestAESCiphers/TestAESWithProviderChange.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all

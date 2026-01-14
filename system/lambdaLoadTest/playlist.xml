@@ -1,22 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../TKG/resources/playlist.xsd">
 	<include>../system.mk</include>
-	<!--
-	Special target to get machine information. This target is in each subfolder playlist.xml.
-	To avoid test target duplication, this belongs to sanity, extended and special. Regular test should only belong to one level -->
-	<test>
-		<testCaseName>MachineInfo</testCaseName>
-		<command>$(JAVA_COMMAND) -cp $(JVM_TEST_ROOT)$(D)TKG$(D)bin$(D)TestKitGen.jar org.openj9.envInfo.EnvDetector MachineInfo; \
-	$(TEST_STATUS)</command>
-		<levels>
-			<level>sanity</level>
-			<level>extended</level>
-			<level>special</level>
-		</levels>
-		<groups>
-			<group>system</group>
-		</groups>
-	</test>
+
 	<test>
 		<testCaseName>LambdaLoadTest_HS_5m</testCaseName>
 		<variations>
@@ -38,9 +23,18 @@
 	</test>
 	<test>
 		<testCaseName>LambdaLoadTest_J9_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode110</variation>
 			<variation>Mode610</variation>
+			<variation>Mode501</variation>
+			<variation>Mode551</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=LambdaLoadTest -test-args=$(Q)timeLimit=5m$(Q); \
 	$(TEST_STATUS)</command>
@@ -57,6 +51,13 @@
 	</test>
 	<test>
 		<testCaseName>LambdaLoadTest_CS_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>-Xgcpolicy:gencon -Xgc:concurrentScavenge</variation>
 		</variations>
@@ -76,6 +77,13 @@
 	</test>
 	<test>
 		<testCaseName>LambdaLoadTest_special_J9_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode101</variation>
 			<variation>Mode103</variation>
@@ -143,9 +151,18 @@
 	</test>
 	<test>
 		<testCaseName>ParallelStreamsLoadTest_J9</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode110</variation>
 			<variation>Mode610</variation>
+			<variation>Mode501</variation>
+			<variation>Mode551</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=ParallelStreamsLoadTest; \
 	$(TEST_STATUS)</command>
@@ -162,6 +179,13 @@
 	</test>
 	<test>
 		<testCaseName>ParallelStreamsLoadTest_CS</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>-Xgcpolicy:gencon -Xgc:concurrentScavenge</variation>
 		</variations>
@@ -201,6 +225,11 @@
 				<comment>https://github.com/eclipse-openj9/openj9/issues/11904</comment>
 				<variation>Mode612-OSRG</variation>
 				<platform>.*windows.*</platform>
+			</disable>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
 			</disable>
 		</disables>
 		<variations>

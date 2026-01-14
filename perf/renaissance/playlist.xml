@@ -16,11 +16,6 @@
 	<include>../perf.mk</include>
 	<test>
 		<testCaseName>renaissance-akka-uct</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/1994#issuecomment-705633262</comment>
-			</disable>
-		</disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)renaissance.jar$(Q) --json $(Q)$(REPORTDIR)$(D)akka-uct.json$(Q) akka-uct; \
 		$(TEST_STATUS)</command>
 		<levels>
@@ -36,10 +31,6 @@
 			<disable>
 				<comment>https://github.com/adoptium/aqa-tests/issues/3189</comment>
 				<platform>x86-32_windows|arm_linux</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/3469</comment>
-				<version>18+</version>
 			</disable>
 			<disable>
 				<comment>runtimes/infrastructure/issues/5444</comment>
@@ -67,10 +58,6 @@
 				<platform>x86-32_windows|arm_linux</platform>
 			</disable>
 			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/3469</comment>
-				<version>18+</version>
-			</disable>
-			<disable>
 				<comment>runtimes/infrastructure/issues/5444</comment>
 				<vendor>ibm</vendor>
 			</disable>
@@ -92,12 +79,10 @@
 		<testCaseName>renaissance-db-shootout</testCaseName>
 		<disables>
 			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/2500#issuecomment-818965455</comment>
-				<version>16+</version>
-			</disable>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/2159#issuecomment-759570887</comment>
-				<platform>^((?!(x86-64_linux|x86-64_mac|x86-64_windows)).)*$</platform>
+				<comment>https://github.com/adoptium/aqa-tests/issues/6669</comment>
+				<vendor>eclipse</vendor>
+				<platform>arm_linux</platform>
+				<version>11</version>
 			</disable>
 		</disables>
 		<command>$(JAVA_COMMAND) $(ADD_OPENS_CMD) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)renaissance.jar$(Q) --json $(Q)$(REPORTDIR)$(D)db-shootout.json$(Q) db-shootout; \
@@ -117,10 +102,6 @@
 			<disable>
 				<comment>https://github.com/adoptium/aqa-tests/issues/3189</comment>
 				<platform>x86-32_windows|arm_linux</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/3469</comment>
-				<version>18+</version>
 			</disable>
 			<disable>
 				<comment>runtimes/infrastructure/issues/5444</comment>
@@ -203,10 +184,6 @@
 				<platform>x86-32_windows|arm_linux</platform>
 			</disable>
 			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/3469</comment>
-				<version>18+</version>
-			</disable>
-			<disable>
 				<comment>runtimes/infrastructure/issues/5444</comment>
 				<vendor>ibm</vendor>
 			</disable>
@@ -230,10 +207,6 @@
 			<disable>
 				<comment>https://github.com/adoptium/aqa-tests/issues/3189</comment>
 				<platform>x86-32_windows|arm_linux</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/3469</comment>
-				<version>18+</version>
 			</disable>
 			<disable>
 				<comment>runtimes/infrastructure/issues/5444</comment>
@@ -272,15 +245,6 @@
 				<platform>x86-32_windows|arm_linux</platform>
 			</disable>
 			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/3469</comment>
-				<version>18+</version>
-			</disable>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/3469</comment>
-				<version>17</version>
-				<platform>s390_linux</platform>
-			</disable>
-			<disable>
 				<comment>runtimes/infrastructure/issues/5444</comment>
 				<vendor>ibm</vendor>
 			</disable>
@@ -302,7 +266,8 @@
 		<testCaseName>renaissance-naive-bayes</testCaseName>
 		<disables>
 			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/1932#issuecomment-708781359</comment>
+				<comment>https://github.com/adoptium/aqa-tests/issues/6701</comment>
+				<platform>.*windows.*</platform>
 			</disable>
 		</disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)renaissance.jar$(Q) --json $(Q)$(REPORTDIR)$(D)naive-bayes.json$(Q) naive-bayes; \
