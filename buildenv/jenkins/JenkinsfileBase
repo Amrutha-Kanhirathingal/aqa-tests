@@ -801,6 +801,7 @@ def runTest( ) {
 		}
 
 		RUNTEST_CMD = "${TARGET} ${CUSTOM_OPTION}"
+		echo "SPEC value is: ${env.SPEC} RUNTEST_CMD=${RUNTEST_CMD} env.BUILD_LIST=${env.BUILD_LIST}"
 		if (env.BUILD_LIST.contains('jck') || env.BUILD_LIST.contains('openjdk') || env.BUILD_LIST.contains('functional')) {
 			if (env.SPEC.startsWith('aix')) {
 				sh "/usr/bin/X11/X -force -vfb -x abx -x dbe -x GLX -secIP 000 :0 &"
