@@ -3,7 +3,7 @@ def dependencyDir = params.DEPENDENCY_DIR ?: 'externalDependency'
 def platformMap = [
     'amac' : '(ci.role.test||ci.role.test.fips)&&hw.arch.aarch64&&(sw.os.osx||sw.os.mac)',
     'xmac' : '(ci.role.test||ci.role.test.fips)&&hw.arch.x86&&sw.os.mac',
-    'xlinux' : 'sles15x86-svl-rt2-1.fyre.ibm.com||rtj-sles16x86-rtp-test-2kari.dev.fyre.ibm.com||sles15x86-rtp-rt2-1.fyre.ibm.com||sles15x86-rtp-rt3-1.fyre.ibm.com',
+    'xlinux' : 'sles15x86-rtp-rt2-1.fyre.ibm.com||sles15x86-rtp-rt3-1.fyre.ibm.com',
     'plinux' : '(ci.role.test||ci.role.test.fips)&&hw.arch.ppc64le&&sw.os.linux',
     'zlinux' : '(ci.role.test||ci.role.test.fips)&&hw.arch.s390x&&sw.os.linux',
     'alinux' : '(ci.role.test||ci.role.test.fips)&&hw.arch.aarch64&&sw.os.linux',
