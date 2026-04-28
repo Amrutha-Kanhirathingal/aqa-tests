@@ -60,8 +60,14 @@
 	<available file="${vs22_bt_vcvarsall_filename}" property="vs22_bt_available"/>
 	<echo message="vs14_vcvarsall_filename = ${vs14_vcvarsall_filename} " />
 	<echo message="vs10_vcvarsall_filename = ${vs10_vcvarsall_filename} " />
-	<echo message="vs22_pro_vcvarsall_filename = ${vs22_pro_vcvarsall_filename} " />
+	<echo message="vs22_pro_vcvarsall_filename = ${vs22_pro_vcvarsall_filename}" />
 	<echo message="vs22_bt_vcvarsall_filename = ${vs22_bt_vcvarsall_filename} " />
+	<condition property="vcvarsall_filename" value="${vs22_pro_vcvarsall_filename}">
+		<isset property="vs22_pro_available"/>
+	</condition>
+	<condition property="vcvarsall_filename" value="${vs22_bt_vcvarsall_filename}">
+		<isset property="vs22_bt_available"/>
+	</condition>
 	<condition property="vcvarsall_filename" value="${vs14_vcvarsall_filename}">
 		<and>
 			<isset property="vs14_available"/>
@@ -77,12 +83,6 @@
 				<equals arg1="${os.arch}" arg2="aarch64" trim="true"/>
 			</not>
 		</and>
-	</condition>
-	<condition property="vcvarsall_filename" value="${vs22_pro_vcvarsall_filename}">
-		<isset property="vs22_pro_available"/>
-	</condition>
-	<condition property="vcvarsall_filename" value="${vs22_bt_vcvarsall_filename}">
-		<isset property="vs22_bt_available"/>
 	</condition>
 	<condition property="windows_native_compiler_present" value="true">
 		<isset property="vcvarsall_filename"/>
