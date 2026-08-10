@@ -873,9 +873,13 @@ getVendorTestMaterial() {
 testJavaVersion()
 {
 	# use environment variable TEST_JDK_HOME to run java -version
+	echo "SDKDIR= ${SDKDIR}"
+	echo "TEST_JDK_HOME before default= ${TEST_JDK_HOME}"
 	if [ "$TEST_JDK_HOME" = "" ]; then
 		TEST_JDK_HOME=$SDKDIR/jdkbinary/j2sdk-image
 	fi
+	echo "TEST_JDK_HOME after default= ${TEST_JDK_HOME}"
+
 	_java=${TEST_JDK_HOME}/bin/java
 	_release=${TEST_JDK_HOME}/release
 	# Code_Coverage use different _java through searching javac for now, following path will be modified after refining files from BUILD
@@ -897,10 +901,10 @@ testJavaVersion()
 		# Search javac as java may not be unique
 		if [[ "$CODE_COVERAGE" == "true" ]]; then
 			echo "${TEST_JDK_HOME}/build/bin/java does not exist! Searching under TEST_JDK_HOME: ${TEST_JDK_HOME}..."
-			javac_path=`find ${TEST_JDK_HOME} \( -name javac -o -name javac.exe \) | egrep '/images/jdk/bin/javac$|/images/jdk/bin/javac.exe$'`
+			javac_path=`find ${TEST_JDK_HOME} \( -name javac -o -name javac.exe \) | egrep '/images/jdk/bin/javac$|/images/jdk/bin/javac.exe$' || true`
 		else
 			echo "${TEST_JDK_HOME}/bin/java does not exist! Searching under TEST_JDK_HOME: ${TEST_JDK_HOME}..."
-			javac_path=`find ${TEST_JDK_HOME} \( -name javac -o -name javac.exe \) | egrep 'bin/javac$|bin/javac.exe$'`
+			javac_path=`find ${TEST_JDK_HOME} \( -name javac -o -name javac.exe \) | egrep 'bin/javac$|bin/javac.exe$' || true`
 		fi
 		if [ "$javac_path" != "" ]; then
 			echo "javac_path: ${javac_path}"
@@ -920,8 +924,24 @@ testJavaVersion()
 			TEST_JDK_HOME=${java_dir}/../
 			echo "TEST_JDK_HOME=${TEST_JDK_HOME}" > ${TESTDIR}/job.properties
 		else
-			echo "Cannot find javac under TEST_JDK_HOME: ${TEST_JDK_HOME}!"
-			exit 1
+			echo "Cannot find javac under TEST_JDK_HOME: ${TEST_JDK_HOME}. Searching for java binary........"
+			java_path=`find ${TEST_JDK_HOME} \( -name java -o -name java.exe \) | egrep 'bin/java$|bin/java.exe$' | head -1`
+			echo "java_path: ${java_path}"
+			if [ "$java_path" != "" ]; then
+				if [[ "${java_path}" =~ "java.exe" ]]; then
+					java_path="${java_path//\\//}"
+				fi
+				java_dir=$(dirname "${java_path}")
+				echo "Run: ${java_path} -version"
+				echo "=JAVA VERSION OUTPUT BEGIN="
+				${java_path} -version
+				echo "=JAVA VERSION OUTPUT END="
+				TEST_JDK_HOME=${java_dir}/../
+				echo "TEST_JDK_HOME=${TEST_JDK_HOME}" > ${TESTDIR}/job.properties
+			else
+				echo "Cannot find java or javac under TEST_JDK_HOME: ${TEST_JDK_HOME}!"
+				exit 1
+			fi
 		fi
 	fi
 }
