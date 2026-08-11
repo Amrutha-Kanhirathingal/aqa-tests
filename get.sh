@@ -937,6 +937,7 @@ testJavaVersion()
 				${java_path} -version
 				echo "=JAVA VERSION OUTPUT END="
 				TEST_JDK_HOME=${java_dir}/../
+				echo "TEST_JDK_HOME...=${TEST_JDK_HOME}"
 				echo "TEST_JDK_HOME=${TEST_JDK_HOME}" > ${TESTDIR}/job.properties
 			else
 				echo "Cannot find java or javac under TEST_JDK_HOME: ${TEST_JDK_HOME}!"
@@ -994,21 +995,26 @@ if [ "$SDKDIR" != "" ]; then
 fi
 
 if [ "$SDK_RESOURCE" == "customized" ] && [ "$CUSTOMIZED_SDK_SOURCE_URL" != "" ]; then
+echo "1"
 	getOpenJDKSources
 fi
 
 if [ ! -d "$TESTDIR/TKG" ]; then
+echo "2"
 	getTestKitGen
 fi
 
 if [ "$JTREG_URL" != "" ]; then
+echo "3"
 	getCustomJtreg
 fi
 
 if [ $CLONE_OPENJ9 != "false" ]; then
+echo "4"
 	getFunctionalTestMaterial
 fi
 
 if [ "$VENDOR_REPOS" != "" ]; then
+echo "5"
 	getVendorTestMaterial
 fi
