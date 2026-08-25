@@ -900,7 +900,7 @@ testJavaVersion()
 			javac_path=`find ${TEST_JDK_HOME} \( -name javac -o -name javac.exe \) | egrep '/images/jdk/bin/javac$|/images/jdk/bin/javac.exe$'`
 		else
 			echo "${TEST_JDK_HOME}/bin/java does not exist! Searching under TEST_JDK_HOME: ${TEST_JDK_HOME}..."
-			javac_path=`find ${TEST_JDK_HOME} \( -name javac -o -name javac.exe \) | egrep 'bin/javac$|bin/javac.exe$' || true`
+			javac_path=`find ${TEST_JDK_HOME} \( -name javac -o -name javac.exe \) | egrep 'bin/javac$|bin/javac.exe$' || true`	
 		fi
 		if [ "$javac_path" != "" ]; then
 			echo "javac_path: ${javac_path}"
