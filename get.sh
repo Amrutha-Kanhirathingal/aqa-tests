@@ -919,9 +919,27 @@ testJavaVersion()
 			echo "=JAVA VERSION OUTPUT END="
 			TEST_JDK_HOME=${java_dir}/../
 			echo "TEST_JDK_HOME=${TEST_JDK_HOME}" > ${TESTDIR}/job.properties
+		else
+			if [ "${USE_JRE}" = "1" ]; then
+				# JRE/SFJ package — no javac shipped, find java directly
+				# compilation step is not applicable for JRE/SFJ
+				java_path=`find ${TEST_JDK_HOME} \( -name java -o -name java.exe \) | egrep 'bin/java$|bin/java.exe$' | head -1`
+				if [ "$java_path" != "" ]; then
+					if [[ "${java_path}" =~ "java.exe" ]]; then
+						java_path="${java_path//\\//}"
+					fi
+					java_dir=$(dirname "${java_path}")
+					echo "Run: ${java_path} -version"
+					echo "=JAVA VERSION OUTPUT BEGIN="
+					${java_path} -version
+					echo "=JAVA VERSION OUTPUT END="
+					TEST_JDK_HOME=${java_dir}/../
+					echo "TEST_JDK_HOME=${TEST_JDK_HOME}" > ${TESTDIR}/job.properties
+					echo "SKIP_COMPILE=1" >> ${TESTDIR}/job.properties
 			else
 				echo "Cannot find javac under TEST_JDK_HOME: ${TEST_JDK_HOME}!"
 				exit 1
+			fi
 		fi
 	fi
 }
