@@ -936,6 +936,10 @@ testJavaVersion()
 					TEST_JDK_HOME=${java_dir}/../
 					echo "TEST_JDK_HOME=${TEST_JDK_HOME}" > ${TESTDIR}/job.properties
 					echo "SKIP_COMPILE=1" >> ${TESTDIR}/job.properties
+				else
+					echo "Cannot find java under TEST_JDK_HOME: ${TEST_JDK_HOME}!"
+					exit 1
+				fi
 			else
 				echo "Cannot find javac under TEST_JDK_HOME: ${TEST_JDK_HOME}!"
 				exit 1
