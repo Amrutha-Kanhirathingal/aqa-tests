@@ -399,6 +399,11 @@ def generateJobsFromParams(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets)
                 : "Test_openjdk${jobJdkVersion}_${pv.short_name}_${TARGET}_${PLATFORM}${buildTestFlagSuffix(jobTestFlag)}"
             echo "TEST_JOB_NAME: ${TEST_JOB_NAME}"
 
+            // --- [PARENT→CHILD] generateJobsFromParams BEFORE: values as seen in parent params ---
+            echo "=== [generateJobsFromParams] BEFORE childParams | Job=${TEST_JOB_NAME}"
+            echo "    params.TIME_LIMIT=${params.TIME_LIMIT}  (pipeline global TIME_LIMIT=${TIME_LIMIT})"
+            echo "    params.TEST_TIME=${params.TEST_TIME}"
+
             // Build childParams purely from pipeline params — empty params are skipped
             def childParams = []
             params.each { param ->
@@ -424,6 +429,11 @@ def generateJobsFromParams(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets)
             childParams << string(name: "PLATFORM",            value: PLATFORM)
             childParams << string(name: "TARGET",            value: TARGET)
             childParams << string(name: "TEST_FLAG",           value: jobTestFlag)
+
+            // --- [PARENT→CHILD] generateJobsFromParams AFTER: values that will be sent to child ---
+            echo "=== [generateJobsFromParams] AFTER  childParams | Job=${TEST_JOB_NAME}"
+            echo "    TIME_LIMIT in childParams=${childParams.find { it.toString().contains('TIME_LIMIT') }}"
+            echo "    TEST_TIME  in childParams=${childParams.find { it.toString().contains('TEST_TIME') }}"
 
             triggerChildJob(TEST_JOB_NAME, childParams)
         }
@@ -529,6 +539,11 @@ def generateJobsWithConfig(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets,
             echo "TEST_JOB_NAME: ${TEST_JOB_NAME}"
             echo "Applied buildConfig: ${buildConfig}"
 
+            // --- [PARENT→CHILD] generateJobsWithConfig BEFORE: source of truth before childParams built ---
+            echo "=== [generateJobsWithConfig] BEFORE childParams | Job=${TEST_JOB_NAME}"
+            echo "    params.TIME_LIMIT=${params.TIME_LIMIT}  buildConfig.TIME_LIMIT=${buildConfig.TIME_LIMIT}"
+            echo "    params.TEST_TIME=${params.TEST_TIME}   buildConfig.TEST_TIME=${buildConfig.TEST_TIME}"
+
             // Apply variant-specific logic for special cases not covered by config
             if (params.VARIANT == "openj9" || params.VARIANT == "ibm") {
                 if (TARGET.contains('functional') && !jobTestFlag.contains("FIPS")) {
@@ -594,6 +609,11 @@ def generateJobsWithConfig(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets,
              "SSH_AGENT_CREDENTIAL", "USER_CREDENTIALS_ID", "CUSTOMIZED_SDK_URL_CREDENTIAL_ID", "DOCKER_REGISTRY_URL", "TRSS_URL"].each { credKey ->
                 if (params[credKey]) childParams << string(name: credKey, value: params[credKey])
             }
+
+            // --- [PARENT→CHILD] generateJobsWithConfig AFTER: values that will be sent to child ---
+            echo "=== [generateJobsWithConfig] AFTER  childParams | Job=${TEST_JOB_NAME}"
+            echo "    TIME_LIMIT in childParams=${childParams.find { it.toString().contains('TIME_LIMIT') }}"
+            echo "    TEST_TIME  in childParams=${childParams.find { it.toString().contains('TEST_TIME') }}"
 
             triggerChildJob(TEST_JOB_NAME, childParams)
         }

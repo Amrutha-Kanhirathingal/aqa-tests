@@ -317,6 +317,9 @@ def setupParallelEnv() {
 		echo "[PARALLEL: ${env.PARALLEL}] childJobNum is ${childJobNum}, creating jobs and running them in parallel..."
 		create_jobs = [:]
 		parallelTestParams =[:]
+		// --- [CHILD→SUB-CHILD] setupParallelEnv BEFORE loop: params this job holds before building sub-child params ---
+		echo "=== [setupParallelEnv] BEFORE loop | Job=${JOB_NAME} | childJobNum=${childJobNum}"
+		echo "    params.TIME_LIMIT=${params.TIME_LIMIT}  params.TEST_TIME=${params.TEST_TIME}"
 		for (int i = 0; i < childJobNum; i++) {
 			def buildListName = env.BUILD_LIST
 			def childTest = ""
@@ -357,6 +360,11 @@ def setupParallelEnv() {
 
 			childParams << string(name: 'UPSTREAM_TEST_JOB_NAME', value: UPSTREAM_TEST_JOB_NAME)
 			childParams << string(name: 'UPSTREAM_TEST_JOB_NUMBER', value: UPSTREAM_TEST_JOB_NUMBER)
+
+			// --- [CHILD→SUB-CHILD] setupParallelEnv AFTER childParams: values about to be sent to sub-child ---
+			echo "=== [setupParallelEnv] AFTER  childParams | Sub-child=${TEST_JOB_NAME}"
+			echo "    TIME_LIMIT in childParams=${childParams.find { it.toString().contains('TIME_LIMIT') }}"
+			echo "    TEST_TIME  in childParams=${childParams.find { it.toString().contains('TEST_TIME') }}"
 
 			parallel_tests[childTest] = {
 				build job: TEST_JOB_NAME, parameters: childParams, propagate: false
@@ -1160,7 +1168,12 @@ def post(output_name) {
 }
 
 def testBuild() {
+	// --- [CHILD JOB] testBuild BEFORE: params as received from parent ---
+	echo "=== [testBuild] BEFORE TIME_LIMIT resolve | Job=${JOB_NAME}"
+	echo "    params.TIME_LIMIT=${params.TIME_LIMIT}  params.TEST_TIME=${params.TEST_TIME}"
 	TIME_LIMIT = params.TIME_LIMIT ? params.TIME_LIMIT.toInteger() : 10
+	// --- [CHILD JOB] testBuild AFTER: resolved timeout value ---
+	echo "=== [testBuild] AFTER  TIME_LIMIT resolve | TIME_LIMIT=${TIME_LIMIT}h  (default=10 when param empty)"
 	timeout(time: TIME_LIMIT, unit: 'HOURS') {
 		boolean runMulticastCmd = false
 
